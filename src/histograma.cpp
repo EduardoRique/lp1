@@ -119,14 +119,24 @@ int main(int argc, char* argv[]){
 
 	for(int i=0; i<21; i++){
 		estatisticas << vmax[i] << "; ";
-		estatisticas << vmin[i] << "; ";
-		estatisticas << vmedia[i] << "; ";
-		estatisticas << vdesvio[i] << "; ";
-		estatisticas << vtotal[i] << "; ";
-		for(int j=0; j<1; j++){
-			estatisticas << endl;
-		}
 	}
+	estatisticas << endl;
+	for(int i=0; i<21; i++){
+		estatisticas << vmin[i] << "; ";
+	}
+	estatisticas << endl;
+	for(int i=0; i<21; i++){
+		estatisticas << vmedia[i] << "; ";
+	}
+	estatisticas << endl;
+	for(int i=0; i<21; i++){
+		estatisticas << vdesvio[i] << "; ";
+	}
+	estatisticas << endl;
+	for(int i=0; i<21; i++){
+		estatisticas << vtotal[i] << "; ";
+		}
+	
 	double queda = (double)vetor[0].nascimentos[20]/(double)vetor[0].nascimentos[19]; /**<variavel que guarda queda*/
 	double cres = (double)vetor[0].nascimentos[20]/(double)vetor[0].nascimentos[19]; /**<variavel que guarda crescimento*/
 	
