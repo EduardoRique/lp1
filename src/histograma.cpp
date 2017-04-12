@@ -1,11 +1,13 @@
 #include "histograma.h"
 
-int main(int argc, char* argv[]){
+int main(){
 
 	Stats *vetor;
 	int cont=0; /**<variavel que conta e armazena o numero de linhas*/
 
-	ifstream arqDados(argv[1]);
+	string argv[3] = {"Nascimentos_RN.csv", "totais.dat", "estatisticas.csv"};
+
+	ifstream arqDados(argv[0]);
 	
 	if(!arqDados){
 		cerr << "O arquivo não pôde ser aberto" << endl;
@@ -65,9 +67,8 @@ int main(int argc, char* argv[]){
 		readC++;
 		getline(arqDados, codigo);
 	}
-	arqDados.close();
 
-	ofstream saida(argv[2]);
+	ofstream saida(argv[1]);
 	if(!saida){
 		cerr << "O arquivo não pôde ser aberto" << endl;
 	}
@@ -85,30 +86,40 @@ int main(int argc, char* argv[]){
 			ano++;
 		}
 	}
-	cout << endl;
-	cout << "O maior numero de nascimentos em cada ano: ";
+	ofstream estatisticas(argv[2]);
+	if(!estatisticas){
+		cerr << "O arquivo não pôde ser aberto" << endl;
+	}
+	//cout << endl;
+	//cout << "O maior numero de nascimentos em cada ano: ";
 	int vmax[21];
 	max(vetor, cont, vmax);
-	for(int i=0; i<21; i++){
-		cout << vmax[i] << " ";
-	}
-	cout << endl;
-
-	cout << endl;
-	cout << "O menor numero de nascimentos em cada ano: ";
+	
 	int vmin[21];
 	min(vetor, cont, vmin);
+
+	double vmedia[21];
+	media(vetor, cont, vmedia);
+
+	double vdesvio[21];
+	desvio(vetor, cont, vdesvio, vmedia);
+
+	int vtotal[21];
+	total(vetor, cont, vtotal);
+
 	for(int i=0; i<21; i++){
-		cout << vmin[i] << " ";
+		estatisticas << vmax[i] << "; ";
+		estatisticas << vmin[i] << "; ";
+		estatisticas << vmedia[i] << "; ";
+		estatisticas << vdesvio[i] << "; ";
+		estatisticas << vtotal[i] << "; ";
+		for(int j=0; j<1; j++){
+			estatisticas << endl;
+		}
 	}
-	cout << endl;
-	//min(vetor, cont);
-	//media(vetor, cont);
-	//desvio(vetor, cont);
-	//total(vetor, cont);
 	
 	saida.close();
-	
+	arqDados.close();
 	delete[] vetor;
 
 	return 0;

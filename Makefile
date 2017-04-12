@@ -1,41 +1,65 @@
-#Makefile for "histograma" C++application
-#Created by Luís Eduardo Rique
+#Makefile for "lab4" C++ aplication
+#Created by Luis Eduardo Rique
 
-PROG = histograma
+# Comandos do sistema operacional
+# Linux: rm -rf
+# Windows: cmd //C del
+RM = rm -rf
 
-SRCPATH = src/
-BINPATH = bin/
-BUILDPATH = build/
-INCLUDEPATH = include/
-
-CPPFLAGS = -Wall -pedantic -ansi -std=c++11 -I$(INCLUDEPATH)
+# Compilador
 CC = g++
 
-OBJS = $(BUILDPATH)main.o $(BUILDPATH)calcArea.o $(BUILDPATH)area.o $(BUILDPATH)calcPerimetro.o $(BUILDPATH)perimetro.o $(BUILDPATH)calcVolume.o $(BUILDPATH)volume.o 
+# Variaveis para os subdiretorios
+INC_DIR = ./include
+SRC_DIR = ./src
+OBJ_DIR = ./build
+BIN_DIR = ./bin
+DOC_DIR = ./doc
+TEST_DIR = ./test
 
-$(PROG) : $(OBJS)
-	$(CC) -o $(BINPATH)$(PROG) $(OBJS)
+# Outras variaveis
 
-$(BUILDPATH)main.o : $(INCLUDEPATH)calcArea.h $(INCLUDEPATH)calcPerimetro.h
-	$(CC) $(CPPFLAGS) -c $(SRCPATH)main.cpp -o $@
+# Opcoes de compilacao
+CFLAGS = -Wall -pedantic -ansi -std=c++11 -I. -I$(INC_DIR)
 
-$(BUILDPATH)calcArea.o : $(INCLUDEPATH)calcArea.h $(INCLUDEPATH)area.h
-	$(CC) $(CPPFLAGS) -c $(SRCPATH)calcArea.cpp -o $@
+# Garante que os alvos desta lista nao sejam confundidos com arquivos de mesmo nome
+.PHONY: all clean distclean doxy
 
-$(BUILDPATH)area.o : $(INCLUDEPATH)area.h
-	$(CC) $(CPPFLAGS) -c $(SRCPATH)area.cpp -o $@
+# Define o alvo (target) para a compilacao completa.
+# Ao final da compilacao, remove os arquivos objeto.
+all: histograma doxy
+debug: CFLAGS += -g -O0
+debug: histograma
 
-$(BUILDPATH)calcPerimetro.o : $(INCLUDEPATH)calcPerimetro.h $(INCLUDEPATH)perimetro.h
-	$(CC) $(CPPFLAGS) -c $(SRCPATH)calcPerimetro.cpp -o $@
+# Alvo (target) para a construcao do executavel histograma
+# Define os arquivos histograma.o funcoes.o como dependencias
+histograma: $(OBJ_DIR)/histograma.o $(OBJ_DIR)/funcoes.o
+	@echo "============="
+	@echo "Ligando o alvo $@"
+	@echo "============="
+	$(CC) $(CFLAGS) -o $(BIN_DIR)/$@ $^
+	@echo "+++ [Executavel histograma criado em $(BIN_DIR)] +++"
+	@echo "============="
 
-$(BUILDPATH)perimetro.o : $(INCLUDEPATH)perimetro.h
-	$(CC) $(CPPFLAGS) -c $(SRCPATH)perimetro.cpp -o $@
+# Alvo (target) para a construcao do objeto histograma.o
+# Define os arquivos histograma.cpp e histograma.h como dependencias.
+$(OBJ_DIR)/histograma.o: $(SRC_DIR)/histograma.cpp $(INC_DIR)/histograma.h
+	$(CC) -c $(CFLAGS) -o $@ $<
 
-$(BUILDPATH)calcVolume.o : $(INCLUDEPATH)calcVolume.h $(INCLUDEPATH)volume.h
-	$(CC) $(CPPFLAGS) -c $(SRCPATH)calcVolume.cpp -o $@
+# Alvo (target) para a construcao do objeto funcoes.o
+# Define os arquivos funcoes.cpp e histograma.h como dependencias.
+$(OBJ_DIR)/funcoes.o: $(SRC_DIR)/funcoes.cpp $(INC_DIR)/histograma.h
+	$(CC) -c $(CFLAGS) -o $@ $<
 
-$(BUILDPATH)volume.o : $(INCLUDEPATH)volume.h
-	$(CC) $(CPPFLAGS) -c $(SRCPATH)volume.cpp -o $@
+# Alvo (target) para a geração automatica de documentacao usando o Doxygen.
+# Sempre remove a documentacao anterior (caso exista) e gera uma nova.
+doxy:
+	$(RM) $(DOC_DIR)/*
+	doxygen Doxyfile
+	mv rtf man latex html doc
 
-clean :
-rm -f core $(BINPATH)$(PROG) $(OBJS)
+# Alvo (target) usado para limpar os arquivos temporarios (objeto)
+# gerados durante a compilacao, assim como os arquivos binarios/executaveis.
+clean:
+	$(RM) $(BIN_DIR)/*
+	$(RM) $(OBJ_DIR)/*

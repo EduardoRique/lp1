@@ -17,10 +17,10 @@ using namespace std;
 void max(Stats *vetor, int cont, int *vmax);
 
 void min(Stats *vetor, int cont, int *vmin);
-/**media(Stats *vetor, int cont);
-desvio(Stats *vetor, int cont);
-total(Stats *vetor, int cont);
-*/
+void media(Stats *vetor, int cont, double *vmedia);
+void desvio(Stats *vetor, int cont, double *vdesvio, double *vmedia);
+void total(Stats *vetor, int cont, int *vtotal);
+
 
 
 #endif
