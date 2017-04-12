@@ -56,7 +56,7 @@ $(OBJ_DIR)/funcoes.o: $(SRC_DIR)/funcoes.cpp $(INC_DIR)/histograma.h
 doxy:
 	$(RM) $(DOC_DIR)/*
 	doxygen Doxyfile
-	mv rtf man latex html doc
+	mv rtf man latex doc
 
 # Alvo (target) usado para limpar os arquivos temporarios (objeto)
 # gerados durante a compilacao, assim como os arquivos binarios/executaveis.
